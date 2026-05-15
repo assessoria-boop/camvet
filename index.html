@@ -3,15 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5D34VP5L');</script>
-  <!-- End Google Tag Manager -->
   <link rel="icon" href="images/logo.png.jpg" type="image/jpeg" />
   <link rel="apple-touch-icon" href="images/logo.png.jpg" />
   <title>CAMVET &ndash; Cl&iacute;nica Veterin&aacute;ria em Mariana/MG</title>
   <meta name="description" content="Cl&iacute;nica veterin&aacute;ria em Mariana/MG com mais de 5 anos cuidando do seu pet. Plant&atilde;o domingo a domingo das 8h &agrave;s 20h. Atendimento humanizado." />
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
-  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
   <link rel="preload" as="image" href="images/clinica-1.webp" fetchpriority="high" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -969,6 +965,21 @@
       f.style.cssText = 'width:100%;height:100%;border:none;';
       wrap.appendChild(f);
     }
+  </script>
+
+  <!-- Google Tag Manager (lazy: carrega na primeira interação) -->
+  <script>
+  (function(){
+    var loaded=false;
+    function loadGTM(){
+      if(loaded)return; loaded=true;
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5D34VP5L');
+    }
+    ['scroll','click','touchstart','mousemove'].forEach(function(e){
+      document.addEventListener(e,loadGTM,{once:true,passive:true});
+    });
+    setTimeout(loadGTM,4000);
+  })();
   </script>
 </body>
 </html>
