@@ -567,6 +567,7 @@
       .galeria-carrossel { aspect-ratio: 1 / 1; height: auto; border-radius: 16px; }
       .carrossel-slide { flex: 0 0 90%; }
     }
+
   </style>
 </head>
 <body>
@@ -584,7 +585,7 @@
   <nav>
     <a href="#" class="nav-logo">
       <div class="nav-logo-circulo">
-        <img src="images/logo.png.jpg" alt="CAMVET" loading="lazy" decoding="async" />
+        <img src="images/logo.png.jpg" alt="CAMVET" loading="lazy" decoding="async" width="40" height="40" />
       </div>
       <span class="nav-nome">CAMVET</span>
       <span class="nav-badge">Cl&iacute;nica Veterin&aacute;ria</span>
@@ -602,7 +603,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-logo-circulo">
-        <img src="images/logo.png.jpg" alt="CAMVET" />
+        <img src="images/logo.png.jpg" alt="CAMVET" width="96" height="96" />
       </div>
       <p class="hero-marca">CAMVET</p>
       <h1>Cl&iacute;nica Veterin&aacute;ria</h1>
@@ -768,27 +769,27 @@
         <div class="carrossel-track" id="carrosselTrack">
           <div class="carrossel-slide">
             <div class="print-card">
-              <img src="images/1.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" />
+              <img src="images/1.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" width="400" height="500" />
             </div>
           </div>
           <div class="carrossel-slide">
             <div class="print-card">
-              <img src="images/2.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" />
+              <img src="images/2.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" width="400" height="500" />
             </div>
           </div>
           <div class="carrossel-slide">
             <div class="print-card">
-              <img src="images/3.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" />
+              <img src="images/3.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" width="400" height="500" />
             </div>
           </div>
           <div class="carrossel-slide">
             <div class="print-card">
-              <img src="images/4.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" />
+              <img src="images/4.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" width="400" height="500" />
             </div>
           </div>
           <div class="carrossel-slide">
             <div class="print-card">
-              <img src="images/5.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" />
+              <img src="images/5.png" alt="Depoimento de cliente CAMVET" loading="lazy" decoding="async" width="400" height="500" />
             </div>
           </div>
         </div>
@@ -883,24 +884,7 @@
   </a>
 
   <script>
-    /* ── MAPA ── */
-    function carregarMapa() {
-      var wrap = document.getElementById('mapaWrap');
-      var placeholder = document.getElementById('mapaPlaceholder');
-      if (placeholder) placeholder.remove();
-      wrap.onclick = null;
-      wrap.style.cursor = 'default';
-      var iframe = document.createElement('iframe');
-      iframe.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.306438419751!2d-43.4170612!3d-20.3702513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa473a1da3c291d%3A0x52ebaab4161db57e!2sCAMVET%20-%20Cl%C3%ADnica%20de%20Atendimento%20Veterin%C3%A1rio%20em%20Mariana%2FMG!5e0!3m2!1spt-BR!2sbr!4v1778856576416!5m2!1spt-BR!2sbr';
-      iframe.allowFullscreen = true;
-      iframe.referrerPolicy = 'no-referrer-when-downgrade';
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = 'none';
-      wrap.appendChild(iframe);
-    }
-
-    /* ── GALERIA CLÍNICA (fade automático) ── */
+/* ── CARROSSEL GALERIA (fade) ── */
     (function () {
       var slides = document.querySelectorAll('#galeriaCarrossel .galeria-slide');
       var dots   = document.querySelectorAll('#galeriaCarrossel .galeria-dot-bar');
@@ -915,7 +899,6 @@
       }
 
       window.irGaleria = mostrar;
-
       slides[0].classList.add('ativo');
       dots[0].classList.add('ativo');
       setInterval(function () { mostrar(atual + 1); }, 3800);
@@ -925,12 +908,22 @@
     (function () {
       var slideAtual  = 0;
       var totalSlides = document.querySelectorAll('.carrossel-slide').length;
+      var cachedW     = 0;
       var autoTimer;
 
-      function atualizarCarrossel() {
-        var track  = document.getElementById('carrosselTrack');
-        var slideW = track.querySelector('.carrossel-slide').offsetWidth + 16;
-        track.style.transform = 'translateX(-' + (slideAtual * slideW) + 'px)';
+      /* cache do offsetWidth — evita reflow a cada update */
+      function slideW() {
+        if (!cachedW) {
+          var s = document.querySelector('.carrossel-slide');
+          cachedW = s ? s.offsetWidth + 16 : 0;
+        }
+        return cachedW;
+      }
+      window.addEventListener('resize', function () { cachedW = 0; }, { passive: true });
+
+      function atualizar() {
+        document.getElementById('carrosselTrack').style.transform =
+          'translateX(-' + (slideAtual * slideW()) + 'px)';
         document.querySelectorAll('.carrossel-dot').forEach(function (d, i) {
           d.classList.toggle('ativo', i === slideAtual);
         });
@@ -938,178 +931,44 @@
 
       function mover(dir) {
         slideAtual = (slideAtual + dir + totalSlides) % totalSlides;
-        atualizarCarrossel();
+        atualizar();
       }
 
       window.moverCarrossel = mover;
-      window.irParaSlide    = function (i) { slideAtual = i; atualizarCarrossel(); };
+      window.irParaSlide    = function (i) { slideAtual = i; atualizar(); };
 
-      function iniciarAuto() {
-        autoTimer = setInterval(function () { mover(1); }, 4500);
-      }
+      function iniciarAuto() { autoTimer = setInterval(function () { mover(1); }, 4500); }
 
       var track = document.getElementById('carrosselTrack');
       track.addEventListener('touchstart', function (e) {
         clearInterval(autoTimer);
-        window._startX = e.touches[0].clientX;
+        window._sx = e.touches[0].clientX;
       }, { passive: true });
       track.addEventListener('touchend', function (e) {
-        var diff = window._startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) mover(diff > 0 ? 1 : -1);
+        if (Math.abs(window._sx - e.changedTouches[0].clientX) > 40)
+          mover(window._sx - e.changedTouches[0].clientX > 0 ? 1 : -1);
         iniciarAuto();
       });
-
       document.querySelector('.carrossel-nav').addEventListener('click', function () {
-        clearInterval(autoTimer);
-        iniciarAuto();
+        clearInterval(autoTimer); iniciarAuto();
       });
 
       iniciarAuto();
     })();
-  </script>
 
-  <!-- GSAP + ScrollTrigger (defer = não bloqueia renderização) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <script>
-    window.addEventListener('load', function () {
-      if (typeof gsap === 'undefined') return;
-      gsap.registerPlugin(ScrollTrigger);
-
-    var CP = 'opacity,transform,willChange';
-    function st(trigger, start) {
-      return { trigger: trigger, start: start || 'top 90%', once: true };
+    /* ── MAPA (lazy load ao clicar) ── */
+    function carregarMapa() {
+      var wrap = document.getElementById('mapaWrap');
+      var ph   = document.getElementById('mapaPlaceholder');
+      if (ph) ph.remove();
+      wrap.onclick = null;
+      wrap.style.cursor = 'default';
+      var f = document.createElement('iframe');
+      f.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.306438419751!2d-43.4170612!3d-20.3702513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa473a1da3c291d%3A0x52ebaab4161db57e!2sCAMVET%20-%20Cl%C3%ADnica%20de%20Atendimento%20Veterin%C3%A1rio%20em%20Mariana%2FMG!5e0!3m2!1spt-BR!2sbr!4v1778856576416!5m2!1spt-BR!2sbr';
+      f.allowFullscreen = true; f.referrerPolicy = 'no-referrer-when-downgrade';
+      f.style.cssText = 'width:100%;height:100%;border:none;';
+      wrap.appendChild(f);
     }
-
-    /* ── HERO (entrada imediata, sem ScrollTrigger) ── */
-    gsap.timeline({ defaults: { ease: 'power3.out', clearProps: CP } })
-      .from('.hero-logo-circulo', { y: -24, opacity: 0, duration: 0.7, ease: 'back.out(1.6)' })
-      .from('.hero-marca',        { y: 16,  opacity: 0, duration: 0.55 }, '-=0.3')
-      .from('.hero h1',           { y: 28,  opacity: 0, duration: 0.65 }, '-=0.35')
-      .from('.hero-subtitulo',    { y: 20,  opacity: 0, duration: 0.55 }, '-=0.3')
-      .from('.hero-localizacao',  { y: 18,  opacity: 0, duration: 0.5  }, '-=0.25')
-      .from('.hero-btns',         { y: 18,  opacity: 0, duration: 0.5  }, '-=0.2');
-
-    /* ── STATS ── */
-    gsap.from('.stat', {
-      scrollTrigger: st('.stats', 'top 92%'),
-      y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out', clearProps: CP
-    });
-
-    /* ── GALERIA ── */
-    gsap.from('.galeria-inner .sec-tag', {
-      scrollTrigger: st('.galeria-wrap'),
-      y: 24, opacity: 0, duration: 0.6, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.galeria-inner .sec-titulo', {
-      scrollTrigger: st('.galeria-wrap'),
-      y: 24, opacity: 0, duration: 0.65, delay: 0.1, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.galeria-carrossel', {
-      scrollTrigger: st('.galeria-carrossel', 'top 92%'),
-      scale: 0.95, opacity: 0, duration: 0.8, delay: 0.15, ease: 'power2.out', clearProps: CP
-    });
-
-    /* ── SERVIÇOS ── */
-    gsap.from('.sec > .sec-tag', {
-      scrollTrigger: st('.sec'),
-      y: 26, opacity: 0, duration: 0.6, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec > .sec-titulo', {
-      scrollTrigger: st('.sec'),
-      y: 26, opacity: 0, duration: 0.65, delay: 0.1, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec > .sec-sub', {
-      scrollTrigger: st('.sec'),
-      y: 22, opacity: 0, duration: 0.6, delay: 0.18, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.servico-card', {
-      scrollTrigger: st('.servicos-grid', 'top 92%'),
-      y: 38, opacity: 0, stagger: 0.08, duration: 0.6, ease: 'power2.out', clearProps: CP
-    });
-
-    /* ── POR QUE CAMVET ── */
-    gsap.from('.sec-porque .sec-tag', {
-      scrollTrigger: st('.sec-porque', 'top 88%'),
-      x: -40, opacity: 0, duration: 0.7, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec-porque .sec-titulo', {
-      scrollTrigger: st('.sec-porque', 'top 88%'),
-      x: -40, opacity: 0, duration: 0.75, delay: 0.1, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec-porque .sec-sub', {
-      scrollTrigger: st('.sec-porque', 'top 88%'),
-      x: -40, opacity: 0, duration: 0.7, delay: 0.18, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.motivo', {
-      scrollTrigger: st('.motivos', 'top 92%'),
-      x: 40, opacity: 0, stagger: 0.12, duration: 0.65, ease: 'power2.out', clearProps: CP
-    });
-
-    /* ── DEPOIMENTOS ── */
-    gsap.from('.sec-depoi-inner .sec-tag', {
-      scrollTrigger: st('.sec-depoi'),
-      y: 26, opacity: 0, duration: 0.6, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec-depoi-inner .sec-titulo', {
-      scrollTrigger: st('.sec-depoi'),
-      y: 26, opacity: 0, duration: 0.65, delay: 0.1, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.carrossel-wrap', {
-      scrollTrigger: st('.carrossel-wrap', 'top 92%'),
-      y: 38, opacity: 0, duration: 0.8, delay: 0.1, ease: 'power2.out', clearProps: CP
-    });
-
-    /* ── CTA ── */
-    gsap.from('.sec-cta h2', {
-      scrollTrigger: st('.sec-cta'),
-      y: 28, opacity: 0, duration: 0.7, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec-cta p', {
-      scrollTrigger: st('.sec-cta'),
-      y: 24, opacity: 0, duration: 0.65, delay: 0.12, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec-cta .btn-wpp', {
-      scrollTrigger: st('.sec-cta', 'top 92%'),
-      y: 20, opacity: 0, duration: 0.6, delay: 0.22, ease: 'power2.out', clearProps: CP
-    });
-
-    /* ── LOCALIZAÇÃO ── */
-    gsap.from('.sec-local-inner > div:first-child .sec-tag', {
-      scrollTrigger: st('.sec-local-inner', 'top 88%'),
-      x: -40, opacity: 0, duration: 0.7, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec-local-inner > div:first-child .sec-titulo', {
-      scrollTrigger: st('.sec-local-inner', 'top 88%'),
-      x: -40, opacity: 0, duration: 0.75, delay: 0.1, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.info-box', {
-      scrollTrigger: st('.info-box', 'top 92%'),
-      y: 28, opacity: 0, duration: 0.7, delay: 0.15, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.sec-local-inner .btn-wpp', {
-      scrollTrigger: st('.sec-local-inner', 'top 88%'),
-      y: 18, opacity: 0, duration: 0.6, delay: 0.28, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('#mapaWrap', {
-      scrollTrigger: st('.sec-local-inner', 'top 88%'),
-      x: 44, opacity: 0, duration: 0.8, delay: 0.18, ease: 'power2.out', clearProps: CP
-    });
-
-    /* ── FOOTER ── */
-    gsap.from('.footer-nome', {
-      scrollTrigger: st('footer', 'top 95%'),
-      y: 20, opacity: 0, duration: 0.6, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('.footer-texto', {
-      scrollTrigger: st('footer', 'top 95%'),
-      y: 20, opacity: 0, duration: 0.6, delay: 0.1, ease: 'power2.out', clearProps: CP
-    });
-    gsap.from('footer .nav-btn', {
-      scrollTrigger: st('footer', 'top 95%'),
-      y: 20, opacity: 0, duration: 0.6, delay: 0.2, ease: 'power2.out', clearProps: CP
-    });
-    }); // end window.load
   </script>
 </body>
 </html>
