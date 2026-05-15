@@ -1,0 +1,26 @@
+========================================
+  IMAGENS NECESSARIAS - CAMVET
+========================================
+
+Coloque os arquivos nesta pasta com os
+nomes exatos abaixo:
+
+OBRIGATORIAS:
+--------------
+logo.png           → Logo da CAMVET (quadrada ou circular)
+clinica-hero.jpg   → Foto principal para o fundo do hero (fachada ou recepcao)
+clinica-1.jpg      → Foto da clinica (interna ou externa) - galeria
+clinica-2.jpg      → Foto da clinica (interna ou externa) - galeria
+
+DEPOIMENTOS (prints de clientes):
+-----------------------------------
+depoimento-1.jpg   → Print de depoimento/avaliacao real de cliente
+depoimento-2.jpg   → Print de depoimento/avaliacao real de cliente
+depoimento-3.jpg   → Print de depoimento/avaliacao real de cliente
+
+DICAS:
+- Formatos aceitos: JPG, JPEG, PNG, WEBP
+- Resolucao recomendada: minimo 800px de largura
+- Hero: use foto horizontal (paisagem) para melhor resultado
+- Depoimentos: prints de WhatsApp ou Google Reviews funcionam bem
+========================================
